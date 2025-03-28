@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Peter's Fitbit Report | Fitbit</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Fonts -->
+    <!-- Adobe Fonts -->
+    <link rel="stylesheet" href="https://use.typekit.net/ifc5shs.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Readex+Pro:wght@160..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+  </head>
+  <body onload="setDate();" onscroll="scrollAnimation();">
+    <nav>
+      <img src="img/profile_image.jpg" id="header_profile" />
+      <a
+        href="https://store.google.com/category/watches_trackers?hl=en-GB"
+        target="_blank"
+      >
+        <img src="img/fitbit_logo.png" id="header_logo" />
+      </a>
+      <p id="currentTime">Time</p>
+    </nav>
+
+    <div class="grid" id="sectionIntro">
+      <div class="cell span5 md3 sm1">
+        <img src="img/bg.svg" id="introImage"/>
+      </div>
+
+      <div class="cell span7 mdspan8 sm1" style="z-index: 20;">
+        <p id="currentDate">Date</p>
+        <h1>
+          Hi, Peter &#128075;
+          <br />
+          This is your fitness report!
+        </h1>
+        <div>
+          <p>
+            <em class="bg_papaya" id="intro_em"
+              >reported by a gen-z</em
+            >
+          </p>
+          <h3 style="position: relative; left: 40%">Let's get on with it...</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid bg_almond" id="sectionWatch">
+      <div class="cell span5 md3 sm1">
+        <img src="img/fitbit_charge_4.png" id="watchImage">
+      </div>
+
+      <div class="cell span7 mdspan8 sm1 vcenter">
+        <h1>
+          Looks like you’re using a
+          <span class="clr_papaya statHighlight" id="statWatch">Fitbit Charge 4</span> to track your data...
+        </h1>
+        <p>
+          A bit <span class="strikeAnimation"><span class="smallTag strikeToStrike">boomer</span> <span class="smallTag strikeToShow">old-fashioned</span></span>  of you,
+          don’t you think?
+          <br />
+          But anyways, continuing on...
+        </p>
+      </div>
+    </div>
+
+    <div class="grid bg_trailrun" id="sectionSteps">
+      <div class="cell col3 md3 sm1 above10">
+        <img src="img/fitbit_charge_4.png" id="stepsImage">
+      </div>
+
+      <div class="cell span8 mdspan8 sm1">
+        <br><br><br><br>
+        <div class="above20">
+          <h1>This week, you walked an average of <span class="clr_teal statHighlight" id="stepsAverage">loading...</span> steps a day.</h1>
+          <p>
+            That's pretty <span class="smallTag smallTagCcw clr_white bg_teal" id=stepsTag>cool</span> of you.<br>
+            <span id="stepsFact"></span>
+          </p>
+        </div>
+
+        <div><canvas id="totalStepsChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid bg_almond" id="sectionRun">
+      <img src="img/runtext.svg" id="runText">
+      <div class="cell col3 md3 sm1" style="z-index: 15;">
+        <img src="img/run.svg" id="runImage">
+      </div>
+
+      <div class="cell span8 mdspan8 sm1" style="z-index: 20;">
+        <h1>
+          While you've engaged in <span class="clr_papaya statHighlight" id="activeAverage">loading...</span> minutes of active movement in the past 7 days...
+        </h1>
+        <p>(that's around <span id="activeCalories">loading...</span> cals a day btw...)</p>
+      </div>
+    </div>
+    <div class="bg_almond" id="sectionMovement">
+      <div class="wideChart" id="movementContainer" style="background: none;">
+        <canvas id="movementChart"></canvas>
+      </div>
+    </div>
+    
+
+    <div class="wideChart" id="idleContainer">
+      <canvas id="idleChart"></canvas>
+    </div>
+
+    <div class="grid bg_ocean" id="sectionIdle">
+      <div class="cell mdspan8 md2 sm1 above20">
+        <h1>...you've also spent <span class="clr_waterfall" id="idleAverage">loading...</span> minutes in <span class="clr_sky">idle mode</span>.</h1>
+        <p>
+          Presumably sleeping... unless you like meditating for <span id="idleAverage2">loading...</span> minutes a day.
+        </p>
+      </div>
+
+      <div class="cell col3 md3 sm1">
+        <img src="img/idle.svg" id="idleImage">
+      </div>
+    </div>
+
+    <div class="grid bg_almond" id="sectionWords">
+      <div class="cell col2 mdspan8 sm1">
+        <h1>
+          To sum up your fitness activity this week, it's giving...
+        </h1>
+      </div>
+      <div class="cell col2 md3 sm1"></div>
+      <div class="cell col1 md1 sm1">
+        <div id="wordCloud">
+          <div class="wordLine">
+            <p><em class="bg_trailrun wordFloors">loading...</em></p>
+            <p><em class="bg_papaya">hi, hydration</em></p>
+            <p><em class="bg_white wordSedentary">loading...</em></p>
+            <p><em class="bg_teal wordSteps">loading...</em></p>
+            <p><em class="bg_sky">i only take the stairs</em></p>
+            <p><em class="bg_trailrun wordFloors">loading...</em></p>
+            <p><em class="bg_papaya">hi, hydration</em></p>
+            <p><em class="bg_white wordSedentary">loading...</em></p>
+            <p><em class="bg_teal wordSteps">loading...</em></p>
+            <p><em class="bg_sky">i only take the stairs</em></p>
+          </div>
+          <div class="wordLine">
+            <p><em class="bg_teal">this is your moment</em></p>
+            <p><em class="bg_sky wordVery">loading...</em></p>
+            <p><em class="bg_trailrun wordCalories">loading...</em></p>
+            <p><em class="bg_papaya wordLightly">loading...</em></p>
+            <p><em class="bg_white wordFairly">loading...</em></p>
+            <p><em class="bg_teal">this is your moment</em></p>
+            <p><em class="bg_sky wordVery">loading...</em></p>
+            <p><em class="bg_trailrun wordCalories">loading...</em></p>
+            <p><em class="bg_papaya wordLightly">loading...</em></p>
+            <p><em class="bg_white wordFairly">loading...</em></p>
+          </div>
+          <div class="wordLine">
+            <p><em class="bg_trailrun wordFloors">loading...</em></p>
+            <p><em class="bg_papaya">hi, hydration</em></p>
+            <p><em class="bg_white wordSedentary">loading...</em></p>
+            <p><em class="bg_teal wordSteps">loading...</em></p>
+            <p><em class="bg_sky">i only take the stairs</em></p>
+            <p><em class="bg_trailrun wordFloors">loading...</em></p>
+            <p><em class="bg_papaya">hi, hydration</em></p>
+            <p><em class="bg_white wordSedentary">loading...</em></p>
+            <p><em class="bg_teal wordSteps">loading...</em></p>
+            <p><em class="bg_sky">i only take the stairs</em></p>
+          </div>
+          <div class="wordLine">
+            <p><em class="bg_teal">this is your moment</em></p>
+            <p><em class="bg_sky wordVery">loading...</em></p>
+            <p><em class="bg_trailrun wordCalories">loading...</em></p>
+            <p><em class="bg_papaya wordLightly">loading...</em></p>
+            <p><em class="bg_white wordFairly">loading...</em></p>
+            <p><em class="bg_teal">this is your moment</em></p>
+            <p><em class="bg_sky wordVery">loading...</em></p>
+            <p><em class="bg_trailrun wordCalories">loading...</em></p>
+            <p><em class="bg_papaya wordLightly">loading...</em></p>
+            <p><em class="bg_white wordFairly">loading...</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid bg_trailrun" id="sectionReport">
+      <div class="cell col1 md1 sm1">
+        <span class="tinyTag clr_black bg_teal" id="weekOf">This week</span>
+        <h1>Weekly activity</h1>
+      </div>
+      <div class="cell col2 md1 sm1"><canvas id="reportStepsChart"></canvas></div>
+      <div class="cell col2 md1 sm1"><canvas id="reportMovementChart"></canvas></div>
+      <div class="cell col3 md1 sm1"><canvas id="reportFloorsChart"></canvas></div>
+      <div class="cell span8 md1 sm1" id="todayStats">
+        <span class="tinyTag clr_black bg_teal" id="tagStats">Today's stats</span>
+        <div class="myStats">
+          <div>
+            <p>Calories</p>
+            <h1 id="reportCals">200</h1>
+            <p><small>cals</small></p>
+          </div>
+          <div>
+            <p>Distance</p>
+            <h1 id="reportDistance">200</h1>
+            <p><small>mil</small></p>
+          </div>
+          <div>
+            <p>Exercise</p>
+            <h1 id="reportExercise">200</h1>
+            <p><small>mins</small></p>
+          </div>
+          <div>
+            <p>Idle</p>
+            <h1 id="reportIdle">200</h1>
+            <p><small>mins</small></p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <footer class="bg_white">
+       <img src="img/fitbit_api_badge.png" id="fitbit_badge">
+      <!-- <a href="https://store.google.com/category/watches_trackers?hl=en-GB" target="_blank">
+        <p><em class="em_small bg_papaya" id="ft_home">home</em></p>
+      </a> -->
+      <p>
+        <em class="em_small bg_papaya" id="ft_share" onmouseenter="hoverLink();" onclick="copyLink();" onmouseleave="resetLink();">share</em>
+        <span id="copied">copy</span>
+      </p>
+      
+    </footer>
+    <!-- <div><canvas id="myChart"></canvas></div> -->
+
+    <script src="main.js"></script>
+  </body>
+</html>
